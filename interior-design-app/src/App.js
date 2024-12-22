@@ -9,6 +9,7 @@ import HomePage from "./Pages/HomePage";
 import DesignPage from "./Pages/DesignPage";
 import LoginPage from "./Pages/LoginPage";
 import PaymentPage from "./Pages/PaymentPage";
+import SignupPage from "./Pages/SignupPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path="/design/:id" element={<DesignPage />}></Route>
       <Route path="/payment/:id" element={<PaymentPage />}></Route>
       <Route path="/" element={<LoginPage />}></Route>
+      <Route path="/register" element={<SignupPage />}></Route>
     </Routes>
   );
 }

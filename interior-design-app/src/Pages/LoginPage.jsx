@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import styles from "../LoginPageCss/LoginPage.module.css";
 import NavbarComponent from "../Components/Navbar/NavbarComponent";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [userDetails, setUserDetails] = useState({
+    username: "",
+    password: "",
+  });
 
   const navigate = useNavigate();
 
@@ -14,11 +17,21 @@ const LoginPage = () => {
     navigate("/home");
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    // e.preventDefault();
     // Handle login logic here (e.g., send data to the server)
-    console.log("Username:", username);
-    console.log("Password:", password);
+    // console.log("Username:", username);
+    try {
+      let response = await axios.post(
+        "http://localhost:8080/api/user/login",
+        userDetails
+      );
+      console.log(response.data);
+      if (response.data.msg == "success") handleNavigate();
+      else alert(response.data.msg);
+    } catch {
+      console.log("error");
+    }
   };
 
   return (
@@ -32,8 +45,13 @@ const LoginPage = () => {
               type="text"
               name="username"
               required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={userDetails.username}
+              onChange={(e) =>
+                setUserDetails({
+                  ...userDetails,
+                  [e.target.name]: e.target.value,
+                })
+              }
             />
             <label>Username</label>
           </div>
@@ -42,18 +60,25 @@ const LoginPage = () => {
               type="password"
               name="password"
               required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={userDetails.password}
+              onChange={(e) =>
+                setUserDetails({
+                  ...userDetails,
+                  [e.target.name]: e.target.value,
+                })
+              }
             />
             <label>Password</label>
           </div>
-          <a className="button" href="home">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            submit
-          </a>
+          <button onClick={handleSubmit}>
+            <a className="button" href="#">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              submit
+            </a>
+          </button>
           <br />
           <button
             onClick={handleNavigate}
