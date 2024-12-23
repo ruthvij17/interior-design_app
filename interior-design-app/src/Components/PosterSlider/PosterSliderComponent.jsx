@@ -1,9 +1,9 @@
 import React from "react";
 import Slider from "react-slick";
-import Poster from "../PosterComponent";
+import Poster from "../Poster/PosterComponent";
 import { NextArrow } from "../HeroCarousel/ArrowsComponent";
 import { PrevArrow } from "../HeroCarousel/ArrowsComponent";
-const PosterSlider = (props) => {
+const PosterSliderComponent = (props) => {
   const { posters, title, subtitle, isDark } = props;
 
   const settings = {
@@ -60,4 +60,4 @@ const PosterSlider = (props) => {
   );
 };
 
-export default PosterSlider;
+export default PosterSliderComponent;

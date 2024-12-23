@@ -37,6 +37,44 @@ app.get("/init", (req, res) => {
   });
 });
 
+// DESIGN TABLE
+app.get("/initdesign", (req, res) => {
+  q = `CREATE TABLE IF NOT EXISTS design (
+    d_id INT AUTO_INCREMENT PRIMARY KEY,
+    price decimal(10,2),
+    image VARCHAR(255),
+    details VARCHAR(255),
+    d_rating decimal(2,1)
+);
+`;
+  connection.query(q, (res, err) => {
+    if (err) return console.log(err);
+    console.log(res);
+  });
+});
+
+app.get("/insertdesign", (req, res) => {
+  q = `INSERT INTO design ( price, image, details, d_rating)
+VALUES ( ?,?,?, ?);
+`;
+  connection.query(
+    q,
+    [
+      35000,
+      "https://www.andacademy.com/resources/wp-content/uploads/2024/04/feature-6.webp",
+      "vintage",
+      3.9,
+    ],
+    (res, err) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log(res);
+    }
+  );
+});
+
 app.post("/api/user/register", (req, res) => {
   console.log(req.body);
   const { username, address, password, phone } = req.body;

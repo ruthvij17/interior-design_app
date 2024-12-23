@@ -7,13 +7,13 @@ import axios from "axios";
 const HomePage = () => {
   const [availableDesign, setavailableDesign] = useState([]);
 
-  useEffect(() => {
-    const requestTopRatedMovies = async () => {
-      const getTopRatedMovies = await axios.get("/movie/top_rated");
-      setavailableDesign(getTopRatedMovies.data.results);
-    };
-    requestTopRatedMovies();
-  }, []);
+  // useEffect(() => {
+  //   const requestTopRatedMovies = async () => {
+  //     const getTopRatedMovies = await axios.get("/movie/top_rated");
+  //     setavailableDesign(getTopRatedMovies.data.results);
+  //   };
+  //   requestTopRatedMovies();
+  // }, []);
   return (
     <>
       <HeroCarousel />
