@@ -1,17 +1,29 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { DesignContext } from "../../Context/DesignContext";
+import PaymentModel from "../PaymentModel/Payment.component";
 
 const DesignHero = () => {
+  const { design } = useContext(DesignContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const [price, setPrice] = useState(0);
+
+  const handlePurchase = (price) => {
+    setIsOpen(true);
+    setPrice(price);
+  };
+
   const imageUrl =
     "https://plus.unsplash.com/premium_photo-1670360414483-64e6d9ba9038?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW50ZXJpb3IlMjBkZXNpZ258ZW58MHx8MHx8fDA%3D";
 
   return (
     <>
+      <PaymentModel setIsOpen={setIsOpen} isOpen={isOpen} price={price} />
       <div>
         {/* Mobile */}
         <div className="lg:hidden w-full">
           <img
             src={imageUrl}
-            alt="Interior Design Cover"
+            alt={design.title || "Interior Design Cover"}
             className="m-4 rounded-md"
             style={{ width: "calc(100% - 2rem)" }}
           />
@@ -19,10 +31,25 @@ const DesignHero = () => {
         <div className="flex flex-col gap-3 lg:hidden">
           <div className="flex flex-col-reverse gap-3 px-4 my-3">
             <div className="text-black flex flex-col gap-2 md:px-4">
-              <h4>Design details Description ex</h4>
-              <h4>Design details Description ex</h4>
-              <h4>Design details Description ex</h4>
+              <h4>{design.description || "Design details Description"}</h4>
+              <h4>Ratings: {design.ratings || "No ratings yet"}</h4>
             </div>
+          </div>
+          <div className="flex items-center gap-3 md:px-4 md:w-screen text-xl px-4">
+            <button
+              className="bg-red-500 w-full py-3 text-white font-semibold rounded-lg"
+              onClick={() => handlePurchase(149)}
+              aria-label="Rent Design for ₹149"
+            >
+              Paint ₹ 149
+            </button>
+            <button
+              className="bg-red-600 w-full py-3 text-white font-semibold rounded-lg"
+              onClick={() => handlePurchase(599)}
+              aria-label="Buy Design for ₹599"
+            >
+              Buy ₹ 599
+            </button>
           </div>
         </div>
       </div>
@@ -39,18 +66,45 @@ const DesignHero = () => {
           }}
         >
           <div className="absolute z-30 left-24 top-10 flex items-center gap-10">
-            <div className="w-64 h-96">
+            <div className="w-96 h-96">
               <img
                 src={imageUrl}
-                alt="Interior Design Cover"
+                alt={design.title || "Interior Design Cover"}
                 className="w-full h-full rounded-lg"
               />
+            </div>
+            <div>
+              <div className="flex flex-col gap-3 px-4 my-3">
+                <h1 className="text-white font-extrabold text-5xl">
+                  {design.title || "Design Title"}
+                </h1>
+                <div className="text-white flex flex-col gap-2">
+                  <h4>Ratings: {design.ratings || "No ratings yet"}</h4>
+                  <h4>{design.description || "Design Description"}</h4>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 px-4 text-xl">
+                <button
+                  className="bg-red-500 w-60 py-3 text-white font-semibold rounded-lg"
+                  onClick={() => handlePurchase(149)}
+                  aria-label="Rent Design for ₹149"
+                >
+                  Paint ₹ 149
+                </button>
+                <button
+                  className="bg-red-600 w-60 py-3 text-white font-semibold rounded-lg"
+                  onClick={() => handlePurchase(599)}
+                  aria-label="Buy Design for ₹599"
+                >
+                  Buy ₹ 599
+                </button>
+              </div>
             </div>
           </div>
         </div>
         <img
           src={imageUrl}
-          alt="Interior Design Cover"
+          alt={design.title || "Interior Design Cover"}
           className="w-full h-full object-cover object-center"
         />
       </div>
