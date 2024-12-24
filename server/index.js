@@ -44,7 +44,8 @@ app.get("/initdesign", (req, res) => {
     price decimal(10,2),
     image VARCHAR(255),
     details VARCHAR(255),
-    d_rating decimal(2,1)
+    d_rating decimal(2,1),
+    description varchar(255)
 );
 `;
   connection.query(q, (res, err) => {
@@ -53,18 +54,20 @@ app.get("/initdesign", (req, res) => {
   });
 });
 
+app.get("/alterdesign", (req, res) => {
+  q = `alter table design add description varchar(255);`;
+  connection.query(q, (result, err) => {
+    if (err) return res.json(err);
+  });
+});
+
 app.get("/insertdesign", (req, res) => {
-  q = `INSERT INTO design ( price, image, details, d_rating)
-VALUES ( ?,?,?, ?);
+  q = `INSERT INTO design ( description)
+VALUES ( ? );
 `;
   connection.query(
     q,
-    [
-      35000,
-      "https://www.andacademy.com/resources/wp-content/uploads/2024/04/feature-6.webp",
-      "vintage",
-      3.9,
-    ],
+    "Luxurious modern interior design with clean lines, neutral tones, and elegant lighting creating a warm, sophisticated ambiance.",
     (res, err) => {
       if (err) {
         console.log(err);
@@ -106,4 +109,57 @@ app.post("/api/user/login", (req, res) => {
     }
     return res.json({ msg: "success" });
   });
+});
+
+app.get("/api/design/:id", (req, res) => {
+  const { id } = req.params;
+  let obj;
+  q = "select * from design where d_id=?";
+  try {
+    connection.query(q, [id], (err, response) => {
+      if (err) {
+        console.log("  error in server /api/design/:id");
+      }
+      if (response.length > 0) {
+        obj = {
+          title: response[0].details,
+          description: response[0].description,
+          ratings: response[0].d_rating,
+          image_url: response[0].image,
+        };
+        console.log(obj);
+        return res.json(obj);
+      } else {
+        console.log("design not exists");
+        return res.json("error");
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get("/api/design", (req, res) => {
+  q = "select d_id,image,details from design;";
+  try {
+    connection.query(q, (err, response) => {
+      if (err) console.log("  error in server /api/design");
+      else {
+        if (response.length > 0) {
+          return res.json(response);
+        } else {
+          console.log("error in server /api/design");
+        }
+      }
+      console.log(response);
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.message);
+  res.status(400).json({ message: err.message });
 });

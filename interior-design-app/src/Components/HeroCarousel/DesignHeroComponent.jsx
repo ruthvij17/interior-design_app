@@ -1,20 +1,49 @@
-import React, { useContext, useState } from "react";
-import { DesignContext } from "../../Context/DesignContext";
+import React, { useState, useEffect } from "react";
 import PaymentModel from "../PaymentModel/Payment.component";
+import axios from "axios";
 
-const DesignHero = () => {
-  const { design } = useContext(DesignContext);
+//take props
+const DesignHero = (props) => {
+  let id = props.design_id;
+  let [design, setDesign] = useState({
+    title: "",
+    desc: "",
+    rating: "",
+  });
   const [isOpen, setIsOpen] = useState(false);
   const [price, setPrice] = useState(0);
+  const [imageUrl, setImageUrl] = useState(
+    "https://plus.unsplash.com/premium_photo-1670360414483-64e6d9ba9038?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW50ZXJpb3IlMjBkZXNpZ258ZW58MHx8MHx8fDA%3D"
+  );
+
+  useEffect(() => {
+    // Fetch data when component mounts or `id` changes
+    const fetchDesign = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/design/${id}`
+        );
+        if (response.data == "error") {
+          console.log("Design does not exists");
+          alert("design does not exists");
+        } else {
+          setImageUrl(response.data.image_url);
+          console.log(response.data);
+          setDesign({ ...response.data });
+        }
+      } catch (err) {
+        console.log("Error in DesignHeroComponent");
+        console.log(err);
+      }
+    };
+
+    fetchDesign();
+  }, [id]);
 
   const handlePurchase = (price) => {
     setIsOpen(true);
     setPrice(price);
   };
-
-  const imageUrl =
-    "https://plus.unsplash.com/premium_photo-1670360414483-64e6d9ba9038?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW50ZXJpb3IlMjBkZXNpZ258ZW58MHx8MHx8fDA%3D";
-
   return (
     <>
       <PaymentModel setIsOpen={setIsOpen} isOpen={isOpen} price={price} />

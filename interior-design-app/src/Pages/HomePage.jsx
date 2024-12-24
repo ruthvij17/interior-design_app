@@ -7,13 +7,19 @@ import axios from "axios";
 const HomePage = () => {
   const [availableDesign, setavailableDesign] = useState([]);
 
-  // useEffect(() => {
-  //   const requestTopRatedMovies = async () => {
-  //     const getTopRatedMovies = await axios.get("/movie/top_rated");
-  //     setavailableDesign(getTopRatedMovies.data.results);
-  //   };
-  //   requestTopRatedMovies();
-  // }, []);
+  useEffect(() => {
+    let fetchData = async () => {
+      const response = await axios.get("http://localhost:8080/api/design");
+      setavailableDesign(response.data);
+      // console.log(response.data);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log("state data");
+    console.log(availableDesign); // This will log the updated state
+  }, [availableDesign]);
   return (
     <>
       <HeroCarousel />
