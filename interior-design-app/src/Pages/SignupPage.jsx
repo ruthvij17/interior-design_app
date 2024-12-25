@@ -13,6 +13,7 @@ const SignupPage = () => {
     password: "",
     address: "",
     phone: "",
+    preference: "",
   });
 
   const navigate = useNavigate();
@@ -31,6 +32,8 @@ const SignupPage = () => {
         "http://localhost:8080/api/user/register",
         userDetails
       );
+      if (response.data == "success") handleNavigate();
+      else alert(response.data.msg);
     } catch {
       console.log("ERROR");
     }
@@ -74,6 +77,21 @@ const SignupPage = () => {
           </div>
           <div className={styles["user-box"]}>
             <input
+              type="text"
+              name="preference"
+              required
+              value={userDetails.preference}
+              onChange={(e) =>
+                setUserDetails({
+                  ...userDetails,
+                  [e.target.name]: e.target.value,
+                })
+              }
+            />
+            <label>Preference</label>
+          </div>
+          <div className={styles["user-box"]}>
+            <input
               type="number"
               name="phone"
               required
@@ -113,12 +131,6 @@ const SignupPage = () => {
             </a>
           </button>
           <br />
-          <button
-            onClick={handleNavigate}
-            className="py-2 px-4 rounded mx-auto block"
-          >
-            <p className="text-white hover:text-blue-400">Skip for now</p>
-          </button>
         </form>
       </div>
     </>

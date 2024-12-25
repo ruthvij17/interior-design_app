@@ -1,10 +1,26 @@
 import React, { useState, useEffect } from "react";
+import { Navigate, useNavigate, Link } from "react-router-dom";
 import PaymentModel from "../PaymentModel/Payment.component";
 import axios from "axios";
 
 //take props
 const DesignHero = (props) => {
   let id = props.design_id;
+  const [costDetails, setCostDetails] = useState(0);
+  // Fetch cost details
+  useEffect(() => {
+    const fetchCostDetails = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/design/${id}/totalcost`
+        );
+        setCostDetails(response.data.totalCost);
+      } catch (error) {
+        console.error("Error fetching cost details:", error);
+      }
+    };
+    fetchCostDetails();
+  }, [id]);
   let [design, setDesign] = useState({
     title: "",
     desc: "",
@@ -70,14 +86,14 @@ const DesignHero = (props) => {
               onClick={() => handlePurchase(149)}
               aria-label="Rent Design for ₹149"
             >
-              Paint ₹ 149
+              Buy ₹ {costDetails}
             </button>
             <button
               className="bg-red-600 w-full py-3 text-white font-semibold rounded-lg"
               onClick={() => handlePurchase(599)}
               aria-label="Buy Design for ₹599"
             >
-              Buy ₹ 599
+              Feedback
             </button>
           </div>
         </div>
@@ -118,15 +134,16 @@ const DesignHero = (props) => {
                   onClick={() => handlePurchase(149)}
                   aria-label="Rent Design for ₹149"
                 >
-                  Paint ₹ 149
+                  Buy ₹ {costDetails}
                 </button>
-                <button
-                  className="bg-red-600 w-60 py-3 text-white font-semibold rounded-lg"
-                  onClick={() => handlePurchase(599)}
-                  aria-label="Buy Design for ₹599"
-                >
-                  Buy ₹ 599
-                </button>
+                <Link to={`/design/${id}/feedback`}>
+                  <button
+                    className="bg-red-600 w-60 py-3 text-white font-semibold rounded-lg"
+                    aria-label="Buy Design for ₹599"
+                  >
+                    Feedback
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

@@ -141,9 +141,7 @@ const DesignPage = () => {
       <DesignHero design_id={id} />
       <div className="container mx-auto px-4">
         {/* Worker Details Section */}
-        <h2 className="text-2xl font-bold text-gray-800 mt-8">
-          Worker Details
-        </h2>
+        <h2 className="text-2xl font-bold text-white mt-8">Worker Details</h2>
         {workerDetails.length > 0 ? (
           <WorkerList workers={workerDetails} />
         ) : (
@@ -153,9 +151,7 @@ const DesignPage = () => {
         )}
 
         {/* Material Details Section */}
-        <h2 className="text-2xl font-bold text-gray-800 mt-8">
-          Material Details
-        </h2>
+        <h2 className="text-2xl font-bold text-white mt-8">Material Details</h2>
         {materialDetails.length > 0 ? (
           <MaterialList materials={materialDetails} />
         ) : (

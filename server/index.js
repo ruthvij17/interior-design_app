@@ -80,17 +80,21 @@ VALUES ( ? );
 
 app.post("/api/user/register", (req, res) => {
   console.log(req.body);
-  const { username, address, password, phone } = req.body;
-  q = `INSERT INTO client ( username, password, address, phone)
-VALUES ( ?,?,?, ?);
+  const { username, address, password, phone, preference } = req.body;
+  q = `INSERT INTO client ( username, password, address, phone,preferences)
+VALUES ( ?,?,?,?,?);
 `;
-  connection.query(q, [username, password, address, phone], (res, err) => {
-    if (err) {
-      console.log(err);
-      return;
+  connection.query(
+    q,
+    [username, password, address, phone, preference],
+    (response, err) => {
+      if (err) {
+        console.log(err);
+        return res.json("success");
+      }
+      console.log(res);
     }
-    console.log(res);
-  });
+  );
 });
 
 app.post("/api/user/login", (req, res) => {
@@ -109,6 +113,21 @@ app.post("/api/user/login", (req, res) => {
     }
     return res.json({ msg: "success" });
   });
+});
+
+app.post("/api/design/:id/feedback", (req, res) => {
+  console.log("Server");
+  let { id } = req.body;
+  let formDetails = req.body.formDetails.value;
+  console.log(req.body);
+  let q = "insert into feedback (f_description,d_id) values(?,?);";
+  try {
+    connection.query(q, [formDetails, id], (response, err) => {
+      return res.json("success");
+    });
+  } catch (err) {
+    console.log("Error in /api/desing/:id/feedback");
+  }
 });
 
 // THIS API TAKES **design_id** AND GENERATES ITS WORKER DETAILS

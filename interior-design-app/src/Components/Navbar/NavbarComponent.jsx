@@ -58,7 +58,7 @@ function NavLg() {
   const navigate = useNavigate();
   const handleNavigate = () => {
     // Navigate to the login page
-    navigate("/");
+    navigate("/register");
   };
   return (
     <>
@@ -82,7 +82,7 @@ function NavLg() {
             className="bg-red-600 text-white px-2 py-1 text-sm rounded"
             onClick={handleNavigate}
           >
-            Sign in
+            Sign up
           </button>
           <div className="w-8 h-8 text-white">
             <BiMenu className="w-full h-full" />

@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 
 const PaymentModel = ({ isOpen, setIsOpen, price }) => {
+  const { id } = useParams();
+  const [costDetails, setCostDetails] = useState(0);
+  // Fetch cost details
+  useEffect(() => {
+    const fetchCostDetails = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/design/${id}/totalcost`
+        );
+        setCostDetails(response.data.totalCost);
+      } catch (error) {
+        console.error("Error fetching cost details:", error);
+      }
+    };
+    fetchCostDetails();
+  }, [id]);
+  useEffect(() => {
+    console.log("Here");
+    console.log(costDetails);
+  }, [costDetails]);
   const closeModal = () => {
     setIsOpen(false);
   };
@@ -51,7 +73,7 @@ const PaymentModel = ({ isOpen, setIsOpen, price }) => {
                     className="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-sm font-medium text-white-900 hover:bg-red-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
                     onClick={closeModal}
                   >
-                    Pay ₹{price}
+                    Pay ₹{costDetails}
                   </button>
                   <button
                     type="button"
