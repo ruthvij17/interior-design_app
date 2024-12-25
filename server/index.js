@@ -211,12 +211,6 @@ app.get("/api/design/:id/totalcost", async (req, res) => {
         console.log("  error in server /api/design/:id/workercost");
       }
       if (response.length > 0) {
-        // THE DATA IS SENT TO CLIENT IN THIS FORMAT (ARRAY OF OBJECTS)
-        // [
-        //   {
-        //     salary: 2000,
-        //   },
-        // ];
         costDetails.workerCost = response[0].salary;
       } else {
         return res.json("error in server /api/design/:id/totalcost");
@@ -230,18 +224,18 @@ app.get("/api/design/:id/totalcost", async (req, res) => {
           console.log("  error in server /api/design/:id/workercost");
         }
         if (response.length > 0) {
-          // THE DATA IS SENT TO CLIENT IN THIS FORMAT (ARRAY OF OBJECTS)
-          // [
-          //   {
-          //     salary: 2000,
-          //   },
-          // ];
-          costDetails.materialCost = response[0].total_sum;
+          costDetails.materialCost = Number(response[0].total_sum);
         } else {
           return res.json("error in server /api/design/:id/totalcost");
         }
         costDetails.totalCost =
           costDetails.materialCost + costDetails.workerCost;
+        // DATA IS SENT TO CLIENT IN THIS FORMAT
+        // {
+        //     "workerCost": 2000,
+        //     "materialCost": 2100,
+        //     "totalCost": 4100
+        // }
         return res.json(costDetails);
       });
     });
