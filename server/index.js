@@ -111,10 +111,149 @@ app.post("/api/user/login", (req, res) => {
   });
 });
 
+// THIS API TAKES **design_id** AND GENERATES ITS WORKER DETAILS
+
+app.get("/api/design/:id/workerdetail", (req, res) => {
+  const { id } = req.params;
+  // ONE DESIGN HAS ONLY 1 WORKER .........1 WORKER CAN HAVE MULTIPLE DESIGNS
+  let q =
+    "select * from worker where w_id = (select w_id from design where d_id=?)";
+  try {
+    connection.query(q, [id], (err, response) => {
+      if (err) {
+        console.log("  error in server /api/design/:id/workerdetails");
+      }
+      if (response.length > 0) {
+        // THE DATA IS SENT TO CLIENT IN THIS FORMAT (ARRAY OF OBJECTS)
+        // [
+        //   {
+        //     w_id: 101,
+        //     name: "Ram",
+        //     phone: "1234567890",
+        //     address: "Kundapura",
+        //     experience: 2,
+        //     salary: 2000,
+        //   },
+        // ];
+        return res.json(response);
+      } else {
+        console.log("No worker available for this design yet");
+        return res.json("error");
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// THIS API TAKES **design_id** AND GENERATES ITS WORKER DETAILS
+
+app.get("/api/design/:id/materialdetail", (req, res) => {
+  const { id } = req.params;
+  // ONE DESIGN HAS MULTIPLE MATERIAL.........
+  let q = "select * from material where d_id = ?";
+  try {
+    connection.query(q, [id], (err, response) => {
+      if (err) {
+        console.log("  error in server /api/design/:id/materialdetail");
+      }
+      if (response.length > 0) {
+        // THE DATA IS SENT TO CLIENT IN THIS FORMAT (ARRAY OF OBJECTS)
+        // [
+        //   {
+        //     m_id: 201,
+        //     m_name: "paint",
+        //     m_qty: 20,
+        //     m_price: 1000,
+        //     d_id: 1,
+        //   },
+        //   {
+        //     m_id: 202,
+        //     m_name: "brush",
+        //     m_qty: 50,
+        //     m_price: 500,
+        //     d_id: 1,
+        //   },
+        //   {
+        //     m_id: 203,
+        //     m_name: "ladder",
+        //     m_qty: 2,
+        //     m_price: 600,
+        //     d_id: 1,
+        //   },
+        // ];
+        return res.json(response);
+      } else {
+        console.log("No materail available for this design yet");
+        return res.json("error");
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// THIS API TAKES **design_id** AND GENERATES THE TOTAL COST FOR THE DESIGN
+
+app.get("/api/design/:id/totalcost", async (req, res) => {
+  const { id } = req.params;
+  let costDetails = {
+    workerCost: 0,
+    materialCost: 0,
+    totalCost: 0,
+  };
+  try {
+    // COST FOR WORKER.........
+
+    let q = `SELECT salary FROM worker WHERE w_id = (SELECT w_id FROM design WHERE d_id = ?)`;
+    connection.query(q, [id], (err, response) => {
+      if (err) {
+        console.log("  error in server /api/design/:id/workercost");
+      }
+      if (response.length > 0) {
+        // THE DATA IS SENT TO CLIENT IN THIS FORMAT (ARRAY OF OBJECTS)
+        // [
+        //   {
+        //     salary: 2000,
+        //   },
+        // ];
+        costDetails.workerCost = response[0].salary;
+      } else {
+        return res.json("error in server /api/design/:id/totalcost");
+      }
+
+      // MATERIAL COST.........
+
+      let q1 = `select sum(m_price) as total_sum from material where d_id=?;`;
+      connection.query(q1, [id], (err, response) => {
+        if (err) {
+          console.log("  error in server /api/design/:id/workercost");
+        }
+        if (response.length > 0) {
+          // THE DATA IS SENT TO CLIENT IN THIS FORMAT (ARRAY OF OBJECTS)
+          // [
+          //   {
+          //     salary: 2000,
+          //   },
+          // ];
+          costDetails.materialCost = response[0].total_sum;
+        } else {
+          return res.json("error in server /api/design/:id/totalcost");
+        }
+        costDetails.totalCost =
+          costDetails.materialCost + costDetails.workerCost;
+        return res.json(costDetails);
+      });
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.get("/api/design/:id", (req, res) => {
   const { id } = req.params;
   let obj;
-  q = "select * from design where d_id=?";
+  let q = "select * from design where d_id=?";
   try {
     connection.query(q, [id], (err, response) => {
       if (err) {
