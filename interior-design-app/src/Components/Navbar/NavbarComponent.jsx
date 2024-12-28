@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { BiChevronDown, BiMenu, BiSearch } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
+import { userContext } from "../../Context/UserProvider";
 
 function NavSm() {
   return (
@@ -18,6 +19,7 @@ function NavSm() {
 }
 function NavMd() {
   const navigate = useNavigate();
+  let user = useContext(userContext);
   const handleNavigate = () => {
     // Navigate to the login page
     navigate("/");
@@ -40,12 +42,16 @@ function NavMd() {
             Mangalore
             <BiChevronDown />
           </span>
-          <button
-            className="bg-red-600 text-white px-2 py-1 text-sm rounded"
-            onClick={handleNavigate}
-          >
-            Sign in
-          </button>
+          {(() => {
+            if (!user) {
+              <button
+                className="bg-red-600 text-white px-2 py-1 text-sm rounded"
+                onClick={handleNavigate}
+              >
+                Sign in
+              </button>;
+            }
+          })()}
           <div className="w-8 h-8 text-white">
             <BiMenu className="w-full h-full" />
           </div>
@@ -56,9 +62,15 @@ function NavMd() {
 }
 function NavLg() {
   const navigate = useNavigate();
+  let user = useContext(userContext);
+  console.log("USER");
+  console.log(user.user);
   const handleNavigate = () => {
     // Navigate to the login page
-    navigate("/register");
+    navigate("/");
+  };
+  const handleNewDesign = () => {
+    navigate("/designform");
   };
   return (
     <>
@@ -74,16 +86,40 @@ function NavLg() {
           </div>
         </div>
         <div className="flex items-center gap-3 ">
+          {(() => {
+            if (user.user) {
+              if (
+                user.user.username == "admin" &&
+                user.user.password == "admin"
+              ) {
+                return (
+                  <button
+                    className="bg-red-600 text-white px-2 py-1 text-sm rounded"
+                    onClick={handleNewDesign}
+                  >
+                    Add new Design
+                  </button>
+                );
+              }
+            }
+          })()}
+
           <span className="text-gray-200 text-base flex items-center cursor-pointer hover:text-white">
             Mangalore
             <BiChevronDown />
           </span>
-          <button
-            className="bg-red-600 text-white px-2 py-1 text-sm rounded"
-            onClick={handleNavigate}
-          >
-            Sign up
-          </button>
+          {(() => {
+            if (!user.user) {
+              return (
+                <button
+                  className="bg-red-600 text-white px-2 py-1 text-sm rounded"
+                  onClick={handleNavigate}
+                >
+                  Sign in
+                </button>
+              );
+            }
+          })()}
           <div className="w-8 h-8 text-white">
             <BiMenu className="w-full h-full" />
           </div>

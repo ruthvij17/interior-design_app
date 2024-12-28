@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import PaymentModel from "../PaymentModel/Payment.component";
 import axios from "axios";
+import { userContext } from "../../Context/UserProvider";
 
 //take props
 const DesignHero = (props) => {
+  const navigate = useNavigate();
+  let user = useContext(userContext);
   let id = props.design_id;
   const [costDetails, setCostDetails] = useState(0);
   // Fetch cost details
@@ -60,6 +63,25 @@ const DesignHero = (props) => {
     setIsOpen(true);
     setPrice(price);
   };
+  const handleDelete = async () => {
+    console.log("delete");
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/api/design/${id}`
+      );
+      if (response.status == 200) {
+        navigate("/home");
+        alert(response.data.message);
+      } else {
+        setImageUrl(response.data.image_url);
+        console.log(response.data);
+        setDesign({ ...response.data });
+      }
+    } catch (err) {
+      console.log("Error in DesignHeroComponent");
+      console.log(err);
+    }
+  };
   return (
     <>
       <PaymentModel setIsOpen={setIsOpen} isOpen={isOpen} price={price} />
@@ -95,6 +117,23 @@ const DesignHero = (props) => {
             >
               Feedback
             </button>
+            {(() => {
+              if (user.user) {
+                if (
+                  user.user.username == "admin" &&
+                  user.user.password == "admin"
+                ) {
+                  return (
+                    <button
+                      className="bg-red-600 w-full py-3 text-white font-semibold rounded-lg"
+                      onClick={() => handleDelete()}
+                    >
+                      Delete Design
+                    </button>
+                  );
+                }
+              }
+            })()}
           </div>
         </div>
       </div>
@@ -144,6 +183,23 @@ const DesignHero = (props) => {
                     Feedback
                   </button>
                 </Link>
+                {(() => {
+                  if (user.user) {
+                    if (
+                      user.user.username == "admin" &&
+                      user.user.password == "admin"
+                    ) {
+                      return (
+                        <button
+                          className="bg-blue-600 px-4 py-3 text-white font-semibold rounded-lg"
+                          onClick={() => handleDelete()}
+                        >
+                          Delete Design
+                        </button>
+                      );
+                    }
+                  }
+                })()}
               </div>
             </div>
           </div>

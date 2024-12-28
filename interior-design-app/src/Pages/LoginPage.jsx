@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styles from "../LoginPageCss/LoginPage.module.css";
 import NavbarComponent from "../Components/Navbar/NavbarComponent";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { userContext } from "../Context/UserProvider";
 
 const LoginPage = () => {
+  let user = useContext(userContext);
   const [userDetails, setUserDetails] = useState({
     username: "",
     password: "",
@@ -16,22 +18,33 @@ const LoginPage = () => {
     // Navigate to the login page
     navigate("/home");
   };
+  const handleNavigate1 = () => {
+    // Navigate to the login page
+    navigate("/register");
+  };
 
   const handleSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     // Handle login logic here (e.g., send data to the server)
-    // console.log("Username:", username);
     try {
       let response = await axios.post(
         "http://localhost:8080/api/user/login",
         userDetails
       );
-      console.log(response.data);
-      if (response.data.msg == "success") handleNavigate();
-      else alert(response.data.msg);
+      if (response.data.msg == "success") {
+        user.updateUser(userDetails);
+        handleNavigate();
+      } else alert(response.data.msg);
     } catch {
       console.log("error");
     }
+  };
+
+  const handleAdmin = () => {
+    setUserDetails({
+      username: "admin",
+      password: "admin",
+    });
   };
 
   return (
@@ -79,12 +92,20 @@ const LoginPage = () => {
               submit
             </a>
           </button>
+          <button onClick={handleAdmin}>
+            <a className="button" href="#">
+              Admin Credentials
+            </a>
+          </button>
           <br />
           <button
-            onClick={handleNavigate}
-            className="py-2 px-4 rounded mx-auto block"
+            onClick={handleNavigate1}
+            className="py-2 px-4 rounded mx-auto block text-white"
           >
-            <p className="text-white hover:text-blue-400">Skip for now</p>
+            Don't have an account?{" "}
+            <span className="text-blue-400 underline hover:text-blue-400">
+              Sign up
+            </span>
           </button>
         </form>
       </div>

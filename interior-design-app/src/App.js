@@ -9,6 +9,7 @@ import DesignPage from "./Pages/DesignPage";
 import LoginPage from "./Pages/LoginPage";
 import SignupPage from "./Pages/SignupPage";
 import FormComponent from "./Pages/FormComponent";
+import DesignForm from "./Pages/DesignForm";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path="/design/:id" element={<DesignPage />}></Route>
       <Route path="/" element={<LoginPage />}></Route>
       <Route path="/register" element={<SignupPage />}></Route>
+      <Route path="/designform" element={<DesignForm />}></Route>
     </Routes>
   );
 }

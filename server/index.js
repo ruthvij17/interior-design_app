@@ -310,6 +310,71 @@ app.get("/api/design", (req, res) => {
   }
 });
 
+app.post("/api/newdesign", (req, res, next) => {
+  console.log("newdesign");
+  try {
+    let { price, image, details, d_rating, description, w_id } = req.body;
+    let d_id;
+    if (w_id < 101 || w_id > 105)
+      return res.status(409).json({ message: "Worker id should be 101 - 105" });
+    let q =
+      "insert into design (price,image,details,d_rating,description,w_id) values(?,?,?,?,?,?);";
+    connection.query(
+      q,
+      [price, image, details, d_rating, description, w_id],
+      (err, result) => {
+        if (err) return console.log("error in newdesign server\n" + err);
+        //get design id
+        else
+          q = `select d_id from design where image=? and price=? and description=? and details=?`;
+        connection.query(
+          q,
+          [image, price, description, details],
+          (err, result) => {
+            if (err)
+              return res.status(500).json({ message: "something went wrong" });
+            d_id = result;
+            console.log(d_id[0].d_id);
+            let { m_name, m_qty, m_price } = req.body;
+            q =
+              "insert into material (m_name,m_qty,m_price,d_id) values(?,?,?,?);";
+            connection.query(
+              q,
+              [m_name, m_qty, m_price, d_id[0].d_id],
+              (err, result) => {
+                if (err) return res.status(500).json({ message: err });
+                else
+                  return res
+                    .status(200)
+                    .json({ message: "Design added successfully" });
+              }
+            );
+          }
+        );
+      }
+    );
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.delete("/api/design/:id", (req, res, next) => {
+  try {
+    let d_id = req.params.id;
+    q = "delete from material where d_id=?";
+    connection.query(q, [d_id], (err, result) => {
+      if (err) return res.json(err);
+      q = "delete from design where d_id=?";
+      connection.query(q, [d_id], (err, response) => {
+        if (err) return res.json(err);
+        else res.status(200).json({ message: "Design delted sucessfully" });
+      });
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.message);
