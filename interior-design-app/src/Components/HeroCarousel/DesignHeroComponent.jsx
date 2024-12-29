@@ -119,10 +119,7 @@ const DesignHero = (props) => {
             </button>
             {(() => {
               if (user.user) {
-                if (
-                  user.user.username == "admin" &&
-                  user.user.password == "admin"
-                ) {
+                if (user.user.u_id == 12) {
                   return (
                     <button
                       className="bg-red-600 w-full py-3 text-white font-semibold rounded-lg"

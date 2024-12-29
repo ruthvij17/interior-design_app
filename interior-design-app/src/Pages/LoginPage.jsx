@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styles from "../LoginPageCss/LoginPage.module.css";
 import NavbarComponent from "../Components/Navbar/NavbarComponent";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ const LoginPage = () => {
   const [userDetails, setUserDetails] = useState({
     username: "",
     password: "",
+    u_id: "",
   });
 
   const navigate = useNavigate();
@@ -23,6 +24,10 @@ const LoginPage = () => {
     navigate("/register");
   };
 
+  useEffect(() => {
+    user.updateUser(userDetails);
+  }, [userDetails]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle login logic here (e.g., send data to the server)
@@ -31,15 +36,15 @@ const LoginPage = () => {
         "http://localhost:8080/api/user/login",
         userDetails
       );
-      if (response.data.msg == "success") {
-        user.updateUser(userDetails);
+      if (response.status == 200) {
+        setUserDetails({ ...userDetails, u_id: response.data.u_id });
+        // console.log(response.data.u_id);
         handleNavigate();
       } else alert(response.data.msg);
-    } catch {
-      console.log("error");
+    } catch (err) {
+      alert(err.response.data.msg);
     }
   };
-
   const handleAdmin = () => {
     setUserDetails({
       username: "admin",

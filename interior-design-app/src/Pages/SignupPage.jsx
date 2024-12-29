@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const SignupPage = () => {
-  //   const [username, setUsername] = useState("");
-  //   const [password, setPassword] = useState("");
   const [userDetails, setUserDetails] = useState({
     id: "",
     username: "",
@@ -20,7 +18,8 @@ const SignupPage = () => {
 
   const handleNavigate = () => {
     // Navigate to the login page
-    navigate("/home");
+    navigate("/");
+    alert("Registration successfull, Please Login");
   };
 
   const handleSubmit = async (e) => {

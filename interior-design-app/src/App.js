@@ -27,11 +27,14 @@ function App() {
   return (
     <Routes>
       <Route path="/home" element={<HomePage />}></Route>
-      <Route path="/design/:id/feedback" element={<FormComponent />}></Route>
+      <Route
+        path="/design/:id/feedback"
+        element={isAuthorized(<FormComponent />)}
+      ></Route>
       <Route path="/design/:id" element={<DesignPage />}></Route>
       <Route path="/" element={<LoginPage />}></Route>
       <Route path="/register" element={<SignupPage />}></Route>
-      <Route path="/designform" element={<DesignForm />}></Route>
+      <Route path="/designform" element={isAuthorized(<DesignForm />)}></Route>
       <Route path="*" element={<PageNotFound />}></Route>
     </Routes>
   );

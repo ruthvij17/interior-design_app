@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { userContext } from "../Context/UserProvider";
 
 const DesignForm = () => {
+  const user = useContext(userContext);
   // Single state object for all form details
   const [formDetails, setFormDetails] = useState({
     price: "",
@@ -43,7 +45,6 @@ const DesignForm = () => {
       price: "",
       image: "",
       details: "",
-      d_rating: "",
       description: "",
       w_id: "101",
       m_name: "",
@@ -117,26 +118,6 @@ const DesignForm = () => {
             value={formDetails.details}
             onChange={handleChange}
             placeholder="Enter details"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            required
-          />
-        </div>
-
-        {/* D_Rating */}
-        <div>
-          <label
-            htmlFor="d_rating"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Rating
-          </label>
-          <input
-            type="number"
-            id="d_rating"
-            name="d_rating"
-            value={formDetails.d_rating}
-            onChange={handleChange}
-            placeholder="Enter rating"
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             required
           />

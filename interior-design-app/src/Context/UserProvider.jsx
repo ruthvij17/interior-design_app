@@ -6,6 +6,9 @@ const UserProvider = (props) => {
   const updateUser = (obj) => {
     setUser(obj);
   };
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
   return (
     <userContext.Provider value={{ user, updateUser }}>
       {props.children}
