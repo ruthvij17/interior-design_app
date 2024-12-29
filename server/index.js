@@ -21,63 +21,6 @@ const connection = mysql.createConnection({
   password: "Pr@th@m19D",
 });
 
-// CREATE THE USER TABLE
-app.get("/init", (req, res) => {
-  q = `CREATE TABLE IF NOT EXISTS CLIENT (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255),
-    password VARCHAR(20),
-    address VARCHAR(255),
-    phone VARCHAR(20)
-);
-`;
-  connection.query(q, (res, err) => {
-    if (err) return console.log(err);
-    console.log(res);
-  });
-});
-
-// DESIGN TABLE
-app.get("/initdesign", (req, res) => {
-  q = `CREATE TABLE IF NOT EXISTS design (
-    d_id INT AUTO_INCREMENT PRIMARY KEY,
-    price decimal(10,2),
-    image VARCHAR(255),
-    details VARCHAR(255),
-    d_rating decimal(2,1),
-    description varchar(255)
-);
-`;
-  connection.query(q, (res, err) => {
-    if (err) return console.log(err);
-    console.log(res);
-  });
-});
-
-app.get("/alterdesign", (req, res) => {
-  q = `alter table design add description varchar(255);`;
-  connection.query(q, (result, err) => {
-    if (err) return res.json(err);
-  });
-});
-
-app.get("/insertdesign", (req, res) => {
-  q = `INSERT INTO design ( description)
-VALUES ( ? );
-`;
-  connection.query(
-    q,
-    "Luxurious modern interior design with clean lines, neutral tones, and elegant lighting creating a warm, sophisticated ambiance.",
-    (res, err) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log(res);
-    }
-  );
-});
-
 app.post("/api/user/register", (req, res) => {
   console.log(req.body);
   const { username, address, password, phone, preference } = req.body;
@@ -143,17 +86,6 @@ app.get("/api/design/:id/workerdetail", (req, res) => {
         console.log("  error in server /api/design/:id/workerdetails");
       }
       if (response.length > 0) {
-        // THE DATA IS SENT TO CLIENT IN THIS FORMAT (ARRAY OF OBJECTS)
-        // [
-        //   {
-        //     w_id: 101,
-        //     name: "Ram",
-        //     phone: "1234567890",
-        //     address: "Kundapura",
-        //     experience: 2,
-        //     salary: 2000,
-        //   },
-        // ];
         return res.json(response);
       } else {
         console.log("No worker available for this design yet");
@@ -177,30 +109,6 @@ app.get("/api/design/:id/materialdetail", (req, res) => {
         console.log("  error in server /api/design/:id/materialdetail");
       }
       if (response.length > 0) {
-        // THE DATA IS SENT TO CLIENT IN THIS FORMAT (ARRAY OF OBJECTS)
-        // [
-        //   {
-        //     m_id: 201,
-        //     m_name: "paint",
-        //     m_qty: 20,
-        //     m_price: 1000,
-        //     d_id: 1,
-        //   },
-        //   {
-        //     m_id: 202,
-        //     m_name: "brush",
-        //     m_qty: 50,
-        //     m_price: 500,
-        //     d_id: 1,
-        //   },
-        //   {
-        //     m_id: 203,
-        //     m_name: "ladder",
-        //     m_qty: 2,
-        //     m_price: 600,
-        //     d_id: 1,
-        //   },
-        // ];
         return res.json(response);
       } else {
         console.log("No materail available for this design yet");
@@ -249,12 +157,6 @@ app.get("/api/design/:id/totalcost", async (req, res) => {
         }
         costDetails.totalCost =
           costDetails.materialCost + costDetails.workerCost;
-        // DATA IS SENT TO CLIENT IN THIS FORMAT
-        // {
-        //     "workerCost": 2000,
-        //     "materialCost": 2100,
-        //     "totalCost": 4100
-        // }
         return res.json(costDetails);
       });
     });
@@ -310,8 +212,7 @@ app.get("/api/design", (req, res) => {
   }
 });
 
-app.post("/api/newdesign", (req, res, next) => {
-  console.log("newdesign");
+app.post("/api/design/new", (req, res, next) => {
   try {
     let { price, image, details, d_rating, description, w_id } = req.body;
     let d_id;
