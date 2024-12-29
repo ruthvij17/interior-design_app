@@ -208,7 +208,7 @@ const DesignForm = () => {
             htmlFor="m_price "
             className="block text-sm font-medium text-gray-700"
           >
-            Quantity used
+            Material Price
           </label>
           <input
             type="number"

@@ -73,6 +73,8 @@
     "vary": "^1.1.2"
   },
   "scripts": {
+    "clientmodule": "cd interior-design-app && npm install",
+    "servermodule": "cd server && npm install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "cd interior-design-app && npm start",
     "server": "cd server && npm run dev",

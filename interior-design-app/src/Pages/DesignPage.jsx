@@ -1,14 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import DefaultLayout from "../Layouts/DefaultLayoutHOC";
 import DesignHero from "../Components/HeroCarousel/DesignHeroComponent";
 import axios from "axios";
+import { userContext } from "../Context/UserProvider";
 
 // Component to display individual worker details
 const WorkerDetails = ({ worker }) => {
+  const user = useContext(userContext);
+  // pending worker delete *********************
+  // const handleWorkerDetailsClick = async () => {
+  //   console.log(worker);
+  //   try {
+  //     let response = await axios.delete(
+  //       `http://localhost:8080/api/worker/${worker.w_id}`
+  //     );
+  //     if (response.status == 200) {
+  //       alert("Worker deleted for this design");
+  //     }
+  //   } catch (err) {
+  //     // alert(err.response.data.msg);
+  //     console.log("Worker delte error");
+  //     console.log(err);
+  //   }
+  // };
   return (
     <div className="border rounded-lg p-4 shadow-lg bg-white">
-      <h3 className="text-lg font-bold text-gray-700 mb-2">{worker.name}</h3>
+      <h3 className="text-lg font-bold text-gray-700 mb-2 flex justify-between">
+        <span>{worker.name}</span>
+        {(() => {
+          if (user.user)
+            if (user.user.u_id == 12) {
+              return (
+                <button
+                  // onClick={handleWorkerDetailsClick}
+                  class="px-3 py-1 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75"
+                >
+                  Delete
+                </button>
+              );
+            }
+        })()}
+      </h3>
       <p className="text-sm text-gray-600">
         <span className="font-semibold">Phone:</span> {worker.phone}
       </p>
@@ -38,11 +71,39 @@ const WorkerList = ({ workers }) => {
 };
 
 // Component to display individual material details
-const MaterialDetails = ({ material }) => {
+const MaterialDetails = ({ material, d_id }) => {
+  const user = useContext(userContext);
+  const handleMaterialClick = async () => {
+    try {
+      let response = await axios.delete(
+        `http://localhost:8080/api/material/${material.m_id}`
+      );
+      if (response.status == 200) {
+        alert("Worker deleted");
+      }
+    } catch (err) {
+      // alert(err.response.data.msg);
+      console.log("Worker delte error");
+      console.log(err);
+    }
+  };
   return (
     <div className="border rounded-lg p-4 shadow-lg bg-white">
-      <h3 className="text-lg font-bold text-gray-700 mb-2">
-        {material.m_name}
+      <h3 className="text-lg font-bold text-gray-700 mb-2 flex justify-between">
+        <span>{material.m_name}</span>
+        {(() => {
+          if (user.user)
+            if (user.user.u_id == 12) {
+              return (
+                <button
+                  onClick={handleMaterialClick}
+                  class="px-3 py-1 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75"
+                >
+                  Delete
+                </button>
+              );
+            }
+        })()}
       </h3>
       <p className="text-sm text-gray-600">
         <span className="font-semibold">Quantity:</span> {material.m_qty}
@@ -90,6 +151,8 @@ const DesignPage = () => {
   const [workerDetails, setWorkerDetails] = useState([]);
   const [materialDetails, setMaterialDetails] = useState([]);
   const [costDetails, setCostDetails] = useState(null);
+  const user = useContext(userContext);
+  const navigate = useNavigate();
 
   // Fetch worker details
   useEffect(() => {
@@ -136,6 +199,11 @@ const DesignPage = () => {
     fetchCostDetails();
   }, [id]);
 
+  const handleMaterialAddClick = () => {
+    console.log("clicked");
+    navigate(`/materialform/${id}`);
+  };
+
   return (
     <>
       <DesignHero design_id={id} />
@@ -151,9 +219,24 @@ const DesignPage = () => {
         )}
 
         {/* Material Details Section */}
-        <h2 className="text-2xl font-bold text-white mt-8">Material Details</h2>
+        <h2 className="text-2xl font-bold text-white mt-8 flex justify-between">
+          <span>Material Details</span>
+          {(() => {
+            if (user.user)
+              if (user.user.u_id == 12) {
+                return (
+                  <button
+                    onClick={handleMaterialAddClick}
+                    class="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75"
+                  >
+                    +
+                  </button>
+                );
+              }
+          })()}
+        </h2>
         {materialDetails.length > 0 ? (
-          <MaterialList materials={materialDetails} />
+          <MaterialList materials={materialDetails} d_id={id} />
         ) : (
           <p className="text-gray-600 mt-4">
             No materials found for this design.

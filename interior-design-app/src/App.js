@@ -12,6 +12,7 @@ import FormComponent from "./Pages/FormComponent";
 import DesignForm from "./Pages/DesignForm";
 import UnauthorizedAccess from "./Pages/UnauthorizedAccess";
 import PageNotFound from "./Pages/PageNotFound";
+import MaterialForm from "./Pages/MaterialForm";
 import { userContext } from "./Context/UserProvider";
 import { useContext } from "react";
 
@@ -35,6 +36,10 @@ function App() {
       <Route path="/" element={<LoginPage />}></Route>
       <Route path="/register" element={<SignupPage />}></Route>
       <Route path="/designform" element={isAuthorized(<DesignForm />)}></Route>
+      <Route
+        path="/materialform/:id"
+        element={isAuthorized(<MaterialForm />)}
+      ></Route>
       <Route path="*" element={<PageNotFound />}></Route>
     </Routes>
   );

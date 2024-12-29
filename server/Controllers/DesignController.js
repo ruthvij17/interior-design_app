@@ -69,7 +69,7 @@ const getMaterialDetails = (req, res, next) => {
         return res.json(response);
       } else {
         console.log("No materail available for this design yet");
-        return res.json("error");
+        return res.json([]);
       }
     });
   } catch (err) {
@@ -168,32 +168,29 @@ const createDesign = (req, res, next) => {
       (err, result) => {
         if (err) return console.log("error in newdesign server\n" + err);
         //get design id
-        else
-          q = `select d_id from design where image=? and price=? and description=? and details=?`;
-        connection.query(
-          q,
-          [image, price, description, details],
-          (err, result) => {
-            if (err)
-              return res.status(500).json({ message: "something went wrong" });
-            d_id = result;
-            console.log(d_id[0].d_id);
-            let { m_name, m_qty, m_price } = req.body;
-            q =
-              "insert into material (m_name,m_qty,m_price,d_id) values(?,?,?,?);";
-            connection.query(
-              q,
-              [m_name, m_qty, m_price, d_id[0].d_id],
-              (err, result) => {
-                if (err) return res.status(500).json({ message: err });
-                else
-                  return res
-                    .status(200)
-                    .json({ message: "Design added successfully" });
-              }
-            );
-          }
-        );
+        // q = `select d_id from design where image=? and price=? and description=? and details=?`;
+        // connection.query(
+        //   q,
+        //   [image, price, description, details],
+        //   (err, result) => {
+        //     if (err)
+        //       return res.status(500).json({ message: "something went wrong" });
+        //     d_id = result;
+        //     console.log(d_id[0].d_id);
+        //     let { m_name, m_qty, m_price } = req.body;
+        //     q =
+        //       "insert into material (m_name,m_qty,m_price,d_id) values(?,?,?,?);";
+        //     connection.query(
+        //       q,
+        //       [m_name, m_qty, m_price, d_id[0].d_id],
+        //       (err, result) => {
+        //         if (err) return res.status(500).json({ message: err });
+        //         else
+        return res.status(200).json({ message: "Design added successfully" });
+        //       }
+        //     );
+        //   }
+        // );
       }
     );
   } catch (err) {
