@@ -82,6 +82,7 @@ const DesignHero = (props) => {
       console.log(err);
     }
   };
+
   return (
     <>
       <PaymentModel setIsOpen={setIsOpen} isOpen={isOpen} price={price} />
@@ -119,7 +120,7 @@ const DesignHero = (props) => {
             </button>
             {(() => {
               if (user.user) {
-                if (user.user.u_id == 12) {
+                if (user.user.u_id == user.admin) {
                   return (
                     <button
                       className="bg-red-600 w-full py-3 text-white font-semibold rounded-lg"
@@ -182,10 +183,7 @@ const DesignHero = (props) => {
                 </Link>
                 {(() => {
                   if (user.user) {
-                    if (
-                      user.user.username == "admin" &&
-                      user.user.password == "admin"
-                    ) {
+                    if (user.user.u_id == 12) {
                       return (
                         <button
                           className="bg-blue-600 px-4 py-3 text-white font-semibold rounded-lg"

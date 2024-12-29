@@ -28,9 +28,9 @@ const WorkerDetails = ({ worker }) => {
     <div className="border rounded-lg p-4 shadow-lg bg-white">
       <h3 className="text-lg font-bold text-gray-700 mb-2 flex justify-between">
         <span>{worker.name}</span>
-        {(() => {
+        {/* {(() => {
           if (user.user)
-            if (user.user.u_id == 12) {
+            if (user.user.u_id == user.admin) {
               return (
                 <button
                   // onClick={handleWorkerDetailsClick}
@@ -40,7 +40,7 @@ const WorkerDetails = ({ worker }) => {
                 </button>
               );
             }
-        })()}
+        })()} */}
       </h3>
       <p className="text-sm text-gray-600">
         <span className="font-semibold">Phone:</span> {worker.phone}
@@ -72,6 +72,7 @@ const WorkerList = ({ workers }) => {
 
 // Component to display individual material details
 const MaterialDetails = ({ material, d_id }) => {
+  const navigate = useNavigate();
   const user = useContext(userContext);
   const handleMaterialClick = async () => {
     try {
@@ -79,7 +80,8 @@ const MaterialDetails = ({ material, d_id }) => {
         `http://localhost:8080/api/material/${material.m_id}`
       );
       if (response.status == 200) {
-        alert("Worker deleted");
+        alert("Material deleted");
+        navigate(`/design/${d_id}`);
       }
     } catch (err) {
       // alert(err.response.data.msg);
@@ -93,7 +95,7 @@ const MaterialDetails = ({ material, d_id }) => {
         <span>{material.m_name}</span>
         {(() => {
           if (user.user)
-            if (user.user.u_id == 12) {
+            if (user.user.u_id == user.admin) {
               return (
                 <button
                   onClick={handleMaterialClick}
@@ -116,11 +118,11 @@ const MaterialDetails = ({ material, d_id }) => {
 };
 
 // Component to display material list
-const MaterialList = ({ materials }) => {
+const MaterialList = ({ materials, d_id }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
       {materials.map((material) => (
-        <MaterialDetails key={material.m_id} material={material} />
+        <MaterialDetails key={material.m_id} material={material} d_id={d_id} />
       ))}
     </div>
   );
@@ -223,7 +225,7 @@ const DesignPage = () => {
           <span>Material Details</span>
           {(() => {
             if (user.user)
-              if (user.user.u_id == 12) {
+              if (user.user.u_id == user.admin) {
                 return (
                   <button
                     onClick={handleMaterialAddClick}

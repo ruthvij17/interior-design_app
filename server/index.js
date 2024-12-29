@@ -5,6 +5,7 @@ const UserRoutes = require("./Routes/UserRoutes");
 const DesignRoutes = require("./Routes/DesignRoutes");
 // const WorkerRoutes = require("./Routes/WorkerRoutes");
 const MaterialRoutes = require("./Routes/MaterialRoutes");
+const PaymentRoutes = require("./Routes/PaymentRoutes");
 
 app.use(cors());
 app.use(express.json());
@@ -19,6 +20,7 @@ app.listen(PORT, (req, res) => {
 app.use("/api/user", UserRoutes);
 app.use("/api/design", DesignRoutes);
 app.use("/api/material", MaterialRoutes);
+app.use("/api/payment", PaymentRoutes);
 // app.use("/api/worker", WorkerRoutes);
 // error handling middleware
 app.use((err, req, res, next) => {

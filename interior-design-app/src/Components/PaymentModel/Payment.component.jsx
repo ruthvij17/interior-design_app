@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import { userContext } from "../../Context/UserProvider";
 
 const PaymentModel = ({ isOpen, setIsOpen, price }) => {
+  const user = useContext(userContext);
   const { id } = useParams();
   const [costDetails, setCostDetails] = useState(0);
   // Fetch cost details
@@ -21,11 +23,23 @@ const PaymentModel = ({ isOpen, setIsOpen, price }) => {
     };
     fetchCostDetails();
   }, [id]);
-  useEffect(() => {
-    console.log("Here");
-    console.log(costDetails);
-  }, [costDetails]);
-  const closeModal = () => {
+
+  const closeModal = async (e) => {
+    if (!user.user && e.target.id == "pay")
+      // console.log(e.target.id);
+      return alert("Please Sign-in to make payment");
+    try {
+      let response = await axios.post("http://localhost:8080/api/payment", {
+        u_id: user.user.u_id,
+        d_id: id,
+        total: costDetails,
+      });
+      if (response.status == 200) {
+        alert("Payment success");
+      }
+    } catch (err) {
+      console.log(err);
+    }
     setIsOpen(false);
   };
   return (
@@ -70,6 +84,7 @@ const PaymentModel = ({ isOpen, setIsOpen, price }) => {
                 <div className="flex gap-3 mt-4">
                   <button
                     type="button"
+                    id="pay"
                     className="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-sm font-medium text-white-900 hover:bg-red-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-900 focus-visible:ring-offset-2"
                     onClick={closeModal}
                   >

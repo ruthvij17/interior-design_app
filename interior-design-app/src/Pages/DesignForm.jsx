@@ -47,9 +47,6 @@ const DesignForm = () => {
       details: "",
       description: "",
       w_id: "101",
-      m_name: "",
-      m_qty: "",
-      m_price: "",
     });
   };
 
@@ -160,63 +157,6 @@ const DesignForm = () => {
             value={formDetails.w_id}
             onChange={handleChange}
             placeholder="Enter Worker ID (101-105)"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="m_name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Material used
-          </label>
-          <input
-            type="text"
-            id="m_name"
-            name="m_name"
-            value={formDetails.m_name}
-            onChange={handleChange}
-            placeholder="Enter material name"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="m_qty "
-            className="block text-sm font-medium text-gray-700"
-          >
-            Quantity used
-          </label>
-          <input
-            type="number"
-            id="m_qty"
-            name="m_qty"
-            value={formDetails.m_qty}
-            onChange={handleChange}
-            placeholder="Enter material name"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="m_price "
-            className="block text-sm font-medium text-gray-700"
-          >
-            Material Price
-          </label>
-          <input
-            type="number"
-            id="m_price"
-            name="m_price"
-            value={formDetails.m_price}
-            onChange={handleChange}
-            placeholder="Enter total material price"
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             required
           />

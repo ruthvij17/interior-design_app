@@ -72,6 +72,9 @@ function NavLg() {
   const handleNewDesign = () => {
     navigate("/designform");
   };
+  const handlePayment = () => {
+    navigate("/paymentdetails");
+  };
   return (
     <>
       <div className="container flex mx-auto px-4 items-center justify-between">
@@ -88,14 +91,22 @@ function NavLg() {
         <div className="flex items-center gap-3 ">
           {(() => {
             if (user.user) {
-              if (user.user.u_id == 12) {
+              if (user.user.u_id == user.admin) {
                 return (
-                  <button
-                    className="bg-red-600 text-white px-2 py-1 text-sm rounded"
-                    onClick={handleNewDesign}
-                  >
-                    Add new Design
-                  </button>
+                  <>
+                    <button
+                      className="bg-green-600 text-white px-2 py-1 text-sm rounded"
+                      onClick={handlePayment}
+                    >
+                      Payment details
+                    </button>
+                    <button
+                      className="bg-red-600 text-white px-2 py-1 text-sm rounded"
+                      onClick={handleNewDesign}
+                    >
+                      Add new Design
+                    </button>
+                  </>
                 );
               }
             }

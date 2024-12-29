@@ -15,6 +15,7 @@ import PageNotFound from "./Pages/PageNotFound";
 import MaterialForm from "./Pages/MaterialForm";
 import { userContext } from "./Context/UserProvider";
 import { useContext } from "react";
+import PaymentTable from "./Pages/PaymentTable";
 
 function App() {
   const user = useContext(userContext);
@@ -40,6 +41,7 @@ function App() {
         path="/materialform/:id"
         element={isAuthorized(<MaterialForm />)}
       ></Route>
+      <Route path="/paymentdetails" element={<PaymentTable />}></Route>
       <Route path="*" element={<PageNotFound />}></Route>
     </Routes>
   );
