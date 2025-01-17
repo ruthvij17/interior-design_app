@@ -3,7 +3,7 @@ import React, { useState, createContext, useEffect } from "react";
 const userContext = createContext();
 const UserProvider = (props) => {
   let [user, setUser] = useState(null);
-  let url = "http://localhost:8080";
+  let url = "https://interior-design-app-backend-pn0n.onrender.com";
   let admin = 12;
   const updateUser = (obj) => {
     setUser(obj);
