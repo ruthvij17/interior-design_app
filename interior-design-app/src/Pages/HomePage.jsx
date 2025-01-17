@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import DefaultLayout from "../Layouts/DefaultLayoutHOC";
 import HeroCarousel from "../Components/HeroCarousel/HeroCarouselComponent";
 import PosterSlider from "../Components/PosterSlider/PosterSliderComponent";
 import axios from "axios";
+import { userContext } from "../Context/UserProvider";
 
 const HomePage = () => {
+  const user = useContext(userContext);
   const [availableDesign, setavailableDesign] = useState([]);
 
   useEffect(() => {
     let fetchData = async () => {
-      const response = await axios.get("http://localhost:8080/api/design");
+      const response = await axios.get(`${user.url}/api/design`);
       setavailableDesign(response.data);
       // console.log(response.data);
     };

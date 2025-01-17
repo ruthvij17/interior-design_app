@@ -71,17 +71,17 @@ const WorkerList = ({ workers }) => {
 };
 
 // Component to display individual material details
-const MaterialDetails = ({ material, d_id }) => {
+const MaterialDetails = ({ material, d_id, trigger }) => {
   const navigate = useNavigate();
   const user = useContext(userContext);
   const handleMaterialClick = async () => {
     try {
       let response = await axios.delete(
-        `http://localhost:8080/api/material/${material.m_id}`
+        `${user.url}/api/material/${material.m_id}`
       );
       if (response.status == 200) {
         alert("Material deleted");
-        navigate(`/design/${d_id}`);
+        trigger();
       }
     } catch (err) {
       // alert(err.response.data.msg);
@@ -118,11 +118,16 @@ const MaterialDetails = ({ material, d_id }) => {
 };
 
 // Component to display material list
-const MaterialList = ({ materials, d_id }) => {
+const MaterialList = ({ materials, d_id, trigger }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
       {materials.map((material) => (
-        <MaterialDetails key={material.m_id} material={material} d_id={d_id} />
+        <MaterialDetails
+          key={material.m_id}
+          material={material}
+          d_id={d_id}
+          trigger={trigger}
+        />
       ))}
     </div>
   );
@@ -153,15 +158,18 @@ const DesignPage = () => {
   const [workerDetails, setWorkerDetails] = useState([]);
   const [materialDetails, setMaterialDetails] = useState([]);
   const [costDetails, setCostDetails] = useState(null);
+  let [temp, setTemp] = useState(false);
   const user = useContext(userContext);
   const navigate = useNavigate();
-
+  const trigger = () => {
+    setTemp(temp == true ? false : true);
+  };
   // Fetch worker details
   useEffect(() => {
     const fetchWorkerDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/design/${id}/workerdetail`
+          `${user.url}/api/design/${id}/workerdetail`
         );
         setWorkerDetails(response.data);
       } catch (error) {
@@ -176,7 +184,7 @@ const DesignPage = () => {
     const fetchMaterialDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/design/${id}/materialdetail`
+          `${user.url}/api/design/${id}/materialdetail`
         );
         setMaterialDetails(response.data);
       } catch (error) {
@@ -184,14 +192,14 @@ const DesignPage = () => {
       }
     };
     fetchMaterialDetails();
-  }, [id]);
+  }, [id, temp]);
 
   // Fetch cost details
   useEffect(() => {
     const fetchCostDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/design/${id}/totalcost`
+          `${user.url}/api/design/${id}/totalcost`
         );
         setCostDetails(response.data);
       } catch (error) {
@@ -238,7 +246,11 @@ const DesignPage = () => {
           })()}
         </h2>
         {materialDetails.length > 0 ? (
-          <MaterialList materials={materialDetails} d_id={id} />
+          <MaterialList
+            materials={materialDetails}
+            d_id={id}
+            trigger={trigger}
+          />
         ) : (
           <p className="text-gray-600 mt-4">
             No materials found for this design.

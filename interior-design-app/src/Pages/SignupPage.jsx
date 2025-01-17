@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styles from "../LoginPageCss/LoginPage.module.css";
 import NavbarComponent from "../Components/Navbar/NavbarComponent";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { userContext } from "../Context/UserProvider";
 
 const SignupPage = () => {
+  const user = useContext(userContext);
   const [userDetails, setUserDetails] = useState({
     id: "",
     username: "",
@@ -28,7 +30,7 @@ const SignupPage = () => {
     console.log(userDetails);
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/user/register",
+        `${user.url}/api/user/register`,
         userDetails
       );
       if (response.data == "success") handleNavigate();

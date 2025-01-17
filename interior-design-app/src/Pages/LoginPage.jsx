@@ -33,7 +33,7 @@ const LoginPage = () => {
     // Handle login logic here (e.g., send data to the server)
     try {
       let response = await axios.post(
-        "http://localhost:8080/api/user/login",
+        `${user.url}/api/user/login`,
         userDetails
       );
       if (response.status == 200) {
@@ -42,7 +42,7 @@ const LoginPage = () => {
         handleNavigate();
       } else alert(response.data.msg);
     } catch (err) {
-      alert(err.response.data.msg);
+      alert(err);
     }
   };
   const handleAdmin = () => {

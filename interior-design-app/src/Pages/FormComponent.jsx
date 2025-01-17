@@ -22,13 +22,10 @@ const FormComponent = () => {
     // Reset the form
     setFormDetails({ description: "" });
     try {
-      let response = await axios.post(
-        `http://localhost:8080/api/design/${id}/feedback`,
-        {
-          id,
-          formDetails,
-        }
-      );
+      let response = await axios.post(`${user.url}/api/design/${id}/feedback`, {
+        id,
+        formDetails,
+      });
       console.log(response.data);
       if (response.data == "success") navigate(`/design/${id}`);
     } catch (err) {

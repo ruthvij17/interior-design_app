@@ -31,7 +31,7 @@ const DesignForm = () => {
     // Perform further actions here (e.g., API call)
     try {
       let response = await axios.post(
-        "http://localhost:8080/api/design/new",
+        `${user.url}/api/design/new`,
         formDetails
       );
       if (response.status == 200) {

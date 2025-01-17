@@ -14,7 +14,7 @@ const PaymentModel = ({ isOpen, setIsOpen, price }) => {
     const fetchCostDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/design/${id}/totalcost`
+          `${user.url}/api/design/${id}/totalcost`
         );
         setCostDetails(response.data.totalCost);
       } catch (error) {
@@ -29,7 +29,7 @@ const PaymentModel = ({ isOpen, setIsOpen, price }) => {
       // console.log(e.target.id);
       return alert("Please Sign-in to make payment");
     try {
-      let response = await axios.post("http://localhost:8080/api/payment", {
+      let response = await axios.post(`${user.url}/api/payment`, {
         u_id: user.user.u_id,
         d_id: id,
         total: costDetails,
