@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { userContext } from "../Context/UserProvider";
 
 function MaterialForm() {
+  const user = useContext(userContext);
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({
@@ -22,10 +24,7 @@ function MaterialForm() {
     e.preventDefault();
     console.log("Submitted Data:", formData);
     try {
-      let response = await axios.post(
-        "http://localhost:8080/api/material/new",
-        formData
-      );
+      let response = await axios.post(`${user.url}/api/material/new`, formData);
       if (response.status == 200) {
         alert("Material added");
         navigate(-1);

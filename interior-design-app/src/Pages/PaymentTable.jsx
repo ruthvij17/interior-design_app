@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { userContext } from "../Context/UserProvider";
 
 function PaymentTable() {
+  const user = useContext(userContext);
   let [payments, setPayments] = useState([]);
   useEffect(() => {
     (async () => {
       try {
-        let response = await axios.get("http://localhost:8080/api/payment");
+        let response = await axios.get(`${user.url}/api/payment`);
         if (response.status == 200) {
           setPayments(response.data);
         }

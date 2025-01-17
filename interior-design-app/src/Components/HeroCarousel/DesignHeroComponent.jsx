@@ -15,7 +15,7 @@ const DesignHero = (props) => {
     const fetchCostDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/design/${id}/totalcost`
+          `${user.url}/api/design/${id}/totalcost`
         );
         setCostDetails(response.data.totalCost);
       } catch (error) {
@@ -39,9 +39,7 @@ const DesignHero = (props) => {
     // Fetch data when component mounts or `id` changes
     const fetchDesign = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/design/${id}`
-        );
+        const response = await axios.get(`${user.url}/api/design/${id}`);
         if (response.data == "error") {
           console.log("Design does not exists");
           alert("design does not exists");
@@ -66,9 +64,7 @@ const DesignHero = (props) => {
   const handleDelete = async () => {
     console.log("delete");
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/api/design/${id}`
-      );
+      const response = await axios.delete(`${user.url}/api/design/${id}`);
       if (response.status == 200) {
         navigate("/home");
         alert(response.data.message);
