@@ -92,34 +92,38 @@ const DesignHero = (props) => {
             style={{ width: "calc(100% - 2rem)" }}
           />
         </div>
-        <div className="flex flex-col gap-3 lg:hidden">
-          <div className="flex flex-col-reverse gap-3 px-4 my-3">
-            <div className="text-black flex flex-col gap-2 md:px-4">
-              <h4>{design.description || "Design details Description"}</h4>
+        <div>
+          <div className="flex flex-col gap-3 px-4 my-3">
+            <h1 className="text-white font-extrabold text-5xl">
+              {design.title || "Design Title"}
+            </h1>
+            <div className="text-white flex flex-col gap-2">
               <h4>Ratings: {design.ratings || "No ratings yet"}</h4>
+              <h4>{design.description || "Design Description"}</h4>
             </div>
           </div>
-          <div className="flex items-center gap-3 md:px-4 md:w-screen text-xl px-4">
+          <div className="flex items-center gap-3 px-4 text-xl">
             <button
-              className="bg-red-500 w-full py-3 text-white font-semibold rounded-lg"
+              className="bg-red-500 w-60 py-3 text-white font-semibold rounded-lg"
               onClick={() => handlePurchase(149)}
               aria-label="Rent Design for ₹149"
             >
               Buy ₹ {costDetails}
             </button>
-            <button
-              className="bg-red-600 w-full py-3 text-white font-semibold rounded-lg"
-              onClick={() => handlePurchase(599)}
-              aria-label="Buy Design for ₹599"
-            >
-              Feedback
-            </button>
+            <Link to={`/design/${id}/feedback`}>
+              <button
+                className="bg-red-600 w-60 py-3 text-white font-semibold rounded-lg"
+                aria-label="Buy Design for ₹599"
+              >
+                Feedback
+              </button>
+            </Link>
             {(() => {
               if (user.user) {
-                if (user.user.u_id == user.admin) {
+                if (user.user.u_id == 12) {
                   return (
                     <button
-                      className="bg-red-600 w-full py-3 text-white font-semibold rounded-lg"
+                      className="bg-blue-600 px-4 py-3 text-white font-semibold rounded-lg"
                       onClick={() => handleDelete()}
                     >
                       Delete Design
